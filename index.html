@@ -1,0 +1,1551 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>喵格侦探</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #342829;
+        --muted: #8d7678;
+        --line: rgba(92, 57, 59, 0.12);
+        --shadow: 0 18px 48px rgba(77, 48, 45, 0.16);
+        --pink: #f18acc;
+        --green: #7fce70;
+        --teal: #45adc2;
+        --orange: #ff9654;
+        --blue: #537eaf;
+        --gold: #f7cf55;
+        --violet: #8269d5;
+        --rose: #d45f86;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+
+      body {
+        min-height: 100dvh;
+        font-family:
+          Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.92) 0 12rem, transparent 12rem),
+          linear-gradient(135deg, #f8ede8 0%, #eef7f4 54%, #fff6e3 100%);
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        overflow: auto;
+      }
+
+      button,
+      input,
+      select {
+        border: 0;
+        font: inherit;
+        color: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .game {
+        width: min(1180px, 100%);
+        min-height: min(820px, calc(100dvh - 36px));
+        background: rgba(255, 250, 247, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.84);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(250px, 310px) 1fr;
+        backdrop-filter: blur(16px);
+      }
+
+      .mobile-tabs {
+        display: none;
+      }
+
+      .mobile-tab {
+        flex: 1;
+        min-height: 40px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        font-weight: 800;
+      }
+
+      .mobile-tab.active {
+        background: #332829;
+        color: white;
+      }
+
+      .sidebar {
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.5);
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .badge {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        background: #252629;
+        color: white;
+        display: grid;
+        place-items: center;
+        font-size: 30px;
+        box-shadow:
+          inset 0 -7px 0 rgba(255, 255, 255, 0.08),
+          0 10px 22px rgba(42, 31, 31, 0.18);
+      }
+
+      h1,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 30px;
+        line-height: 1;
+      }
+
+      .subtitle {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .seed-box,
+      .stats,
+      .rules,
+      .records {
+        display: grid;
+        gap: 10px;
+      }
+
+      .seed-box {
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .seed-line {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+      }
+
+      .seed-input {
+        min-width: 0;
+        height: 42px;
+        padding: 0 12px;
+        border-radius: 13px;
+        background: white;
+        box-shadow: inset 0 0 0 1px rgba(92, 57, 59, 0.1);
+      }
+
+      .tab,
+      .round-button,
+      .tool-button,
+      .primary-button {
+        min-height: 42px;
+        border-radius: 14px;
+        background: white;
+        box-shadow: 0 6px 15px rgba(77, 48, 45, 0.1);
+        transition:
+          transform 160ms ease,
+          box-shadow 160ms ease,
+          background 160ms ease;
+      }
+
+      .tab:hover,
+      .round-button:hover,
+      .tool-button:hover,
+      .primary-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 18px rgba(77, 48, 45, 0.13);
+      }
+
+      .stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.78);
+      }
+
+      .stat span:first-child {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .stat strong {
+        font-size: 19px;
+      }
+
+      .records {
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .records-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        font-weight: 900;
+      }
+
+      .record-list {
+        display: grid;
+        gap: 6px;
+        max-height: 112px;
+        overflow: auto;
+        padding-right: 2px;
+      }
+
+      .record-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+        align-items: center;
+        font-size: 12px;
+        color: #5b4548;
+      }
+
+      .record-rank {
+        width: 22px;
+        height: 22px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: #332829;
+        color: white;
+        font-weight: 900;
+      }
+
+      .rule {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 11px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.62);
+        color: #5b4548;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .rule-mark {
+        width: 24px;
+        height: 24px;
+        border-radius: 9px;
+        background: #332829;
+        color: white;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        font-size: 13px;
+      }
+
+      .controls {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .primary-button {
+        grid-column: 1 / -1;
+        background: #332829;
+        color: white;
+        font-weight: 700;
+      }
+
+      .stage {
+        padding: 22px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 16px;
+        min-width: 0;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .round-button {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+        border-radius: 50%;
+      }
+
+      .level-title {
+        text-align: center;
+      }
+
+      .level-title strong {
+        display: block;
+        color: #b78387;
+        font-size: 18px;
+      }
+
+      .level-title span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .score-row,
+      .tool-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .pill {
+        min-height: 38px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: white;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 6px 16px rgba(77, 48, 45, 0.09);
+        font-weight: 800;
+      }
+
+      .pill small {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .hearts {
+        color: #f24858;
+        letter-spacing: 2px;
+        font-size: 18px;
+      }
+
+      .logic-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        max-width: 760px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .logic-item {
+        min-height: 44px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 8px 10px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.74);
+        color: #a78286;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .board-wrap {
+        align-self: center;
+        justify-self: center;
+        width: min(660px, 100%, calc(100dvh - 260px));
+        min-width: 280px;
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+
+      .board {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 14px 28px rgba(77, 48, 45, 0.14);
+      }
+
+      .cell {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        min-height: 0;
+        border-radius: 9px;
+        border: 2px solid rgba(255, 255, 255, 0.42);
+        box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.05);
+        transition:
+          transform 120ms ease,
+          filter 120ms ease,
+          opacity 120ms ease;
+        user-select: none;
+        touch-action: manipulation;
+        width: var(--cell-size, auto);
+        height: var(--cell-size, auto);
+      }
+
+      .cell:hover {
+        transform: scale(1.03);
+        filter: saturate(1.05);
+        z-index: 2;
+      }
+
+      .cell.conflict {
+        outline: 4px solid rgba(242, 79, 93, 0.9);
+        outline-offset: -5px;
+      }
+
+      .cell.given {
+        cursor: not-allowed;
+        filter: saturate(0.72) brightness(1.04);
+      }
+
+      .cell.marked::before,
+      .cell.revealed::before {
+        content: "";
+        position: absolute;
+        inset: 10%;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 7px 12px rgba(77, 48, 45, 0.16);
+      }
+
+      .poop-face {
+        position: relative;
+        width: 76%;
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        font-size: clamp(20px, 4.4vw, 40px);
+        line-height: 1;
+        filter: drop-shadow(0 4px 5px rgba(77, 48, 45, 0.2));
+        animation: poop-wiggle 3.8s ease-in-out infinite;
+        animation-delay: var(--poop-delay, 0s);
+      }
+
+      .poop-face::before {
+        content: "💩";
+      }
+
+      .poop-eyes {
+        position: absolute;
+        left: 50%;
+        top: 58%;
+        width: 54%;
+        display: flex;
+        justify-content: space-between;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+      }
+
+      .poop-eyes i {
+        width: 45%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #fff7ef;
+        box-shadow:
+          inset 0 -1px 0 rgba(74, 44, 38, 0.2),
+          0 1px 2px rgba(74, 44, 38, 0.25);
+        position: relative;
+        transform-origin: center;
+        animation: poop-blink 3.2s ease-in-out infinite;
+        animation-delay: var(--blink-delay, 0s);
+      }
+
+      .poop-eyes i::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        width: 42%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #251817;
+        transform: translate(-50%, -50%);
+      }
+
+      .cell.given .poop-face {
+        opacity: 0.7;
+      }
+
+      @keyframes poop-wiggle {
+        0%,
+        78%,
+        100% {
+          transform: translateY(0) rotate(0deg) scale(1);
+        }
+
+        82% {
+          transform: translateY(-3%) rotate(-5deg) scale(1.04);
+        }
+
+        88% {
+          transform: translateY(2%) rotate(4deg) scale(0.98);
+        }
+
+        94% {
+          transform: translateY(-1%) rotate(-2deg) scale(1.02);
+        }
+      }
+
+      @keyframes poop-blink {
+        0%,
+        82%,
+        90%,
+        100% {
+          transform: scaleY(1);
+          border-radius: 50%;
+        }
+
+        86% {
+          transform: scaleY(0.14);
+          border-radius: 999px;
+        }
+      }
+
+      .cat-face {
+        position: relative;
+        width: 78%;
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #2f3135;
+        box-shadow:
+          inset 0 -7px 0 rgba(0, 0, 0, 0.16),
+          0 7px 14px rgba(77, 48, 45, 0.15);
+        isolation: isolate;
+      }
+
+      .cat-face::before,
+      .cat-face::after {
+        content: "";
+        position: absolute;
+        top: -10%;
+        width: 34%;
+        height: 34%;
+        background: #2f3135;
+        transform: rotate(45deg);
+        border-radius: 6px;
+        z-index: -1;
+      }
+
+      .cat-face::before {
+        left: 10%;
+      }
+
+      .cat-face::after {
+        right: 10%;
+      }
+
+      .cat-eyes {
+        width: 62%;
+        display: flex;
+        justify-content: space-between;
+        transform: translateY(-10%);
+      }
+
+      .cat-eyes i {
+        width: 28%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: white;
+        position: relative;
+      }
+
+      .cat-eyes i::after {
+        content: "";
+        position: absolute;
+        inset: 28%;
+        border-radius: 50%;
+        background: #171719;
+      }
+
+      .cat-muzzle {
+        position: absolute;
+        bottom: 15%;
+        width: 62%;
+        height: 30%;
+        border-radius: 50% 50% 44% 44%;
+        background: #f6f0ee;
+      }
+
+      .cat-muzzle::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 24%;
+        width: 16%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #df777d;
+        transform: translateX(-50%);
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        display: none;
+        place-items: center;
+        padding: 22px;
+        pointer-events: none;
+      }
+
+      .overlay.show {
+        display: grid;
+      }
+
+      .toast {
+        width: min(410px, 88%);
+        padding: 20px 22px;
+        border-radius: 22px;
+        background: rgba(50, 39, 40, 0.86);
+        color: white;
+        text-align: center;
+        box-shadow: 0 18px 40px rgba(34, 26, 27, 0.28);
+        backdrop-filter: blur(10px);
+      }
+
+      .result-actions {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .overlay.result {
+        pointer-events: auto;
+      }
+
+      .overlay.result .result-actions {
+        display: grid;
+      }
+
+      .result-button {
+        min-height: 40px;
+        border-radius: 13px;
+        background: white;
+        color: #332829;
+        font-weight: 900;
+      }
+
+      .result-button.primary {
+        background: #ffe163;
+      }
+
+      .toast strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #ffe163;
+        font-size: 24px;
+      }
+
+      .tool-button {
+        min-width: 126px;
+        padding: 9px 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        font-weight: 800;
+        position: relative;
+      }
+
+      .tool-button.active {
+        background: #332829;
+        color: white;
+      }
+
+      .bubble {
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: #f24f5d;
+        color: white;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .color-pink { background: var(--pink); }
+      .color-green { background: var(--green); }
+      .color-teal { background: var(--teal); }
+      .color-orange { background: var(--orange); }
+      .color-blue { background: var(--blue); }
+      .color-gold { background: var(--gold); }
+      .color-violet { background: var(--violet); }
+      .color-rose { background: var(--rose); }
+
+      @media (orientation: landscape) and (max-height: 700px) {
+        body {
+          padding: max(6px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+          place-items: start center;
+        }
+
+        .game {
+          min-height: auto;
+          height: calc(100dvh - max(16px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+          grid-template-columns: minmax(220px, 260px) 1fr;
+        }
+
+        .sidebar {
+          padding: 14px;
+          gap: 10px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+
+        .badge {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+        }
+
+        .rule,
+        .stat,
+        .seed-box {
+          padding: 8px 10px;
+        }
+
+        .stage {
+          padding: 12px;
+          gap: 10px;
+          min-height: 0;
+        }
+
+        .logic-strip {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .board-wrap {
+          width: min(calc(100dvh - 166px), calc(100vw - 318px), 620px);
+          min-width: 260px;
+        }
+      }
+
+      @media (max-width: 880px) {
+        body {
+          padding: 0;
+          place-items: stretch;
+        }
+
+        .game {
+          min-height: 100dvh;
+          border-radius: 0;
+          grid-template-columns: 1fr;
+          grid-template-rows: auto 1fr;
+          overflow: auto;
+        }
+
+        .mobile-tabs {
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          display: flex;
+          gap: 8px;
+          padding: 10px;
+          background: rgba(255, 250, 247, 0.94);
+          border-bottom: 1px solid var(--line);
+          backdrop-filter: blur(12px);
+        }
+
+        .sidebar {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          padding: 16px;
+          gap: 12px;
+        }
+
+        body.mobile-board .sidebar {
+          display: none;
+        }
+
+        body.mobile-info .stage {
+          display: none;
+        }
+
+        .rules {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          font-size: 12px;
+        }
+
+        .controls {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .primary-button {
+          grid-column: auto;
+        }
+
+        .stage {
+          padding: 16px;
+          min-height: calc(100dvh - 61px);
+          grid-template-rows: auto auto auto 1fr auto;
+        }
+
+        .board-wrap {
+          width: min(96vw, calc(100dvh - 250px));
+          min-width: 0;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .brand {
+          align-items: flex-start;
+        }
+
+        h1 {
+          font-size: 25px;
+        }
+
+        .rules,
+        .logic-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          gap: 8px;
+        }
+
+        .round-button {
+          width: 40px;
+          height: 40px;
+        }
+
+        .board {
+          gap: 4px;
+          padding: 6px;
+          border-radius: 14px;
+        }
+
+        .cell {
+          border-radius: 7px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="game" aria-label="喵格侦探网页游戏">
+      <nav class="mobile-tabs" aria-label="移动端视图切换">
+        <button class="mobile-tab active" type="button" id="infoTab">信息</button>
+        <button class="mobile-tab" type="button" id="boardTab">棋盘</button>
+      </nav>
+      <aside class="sidebar">
+        <section class="brand" aria-label="游戏名称">
+          <div class="badge" aria-hidden="true">ฅ</div>
+          <div>
+            <h1>喵格侦探</h1>
+            <p class="subtitle">公式生成，无限关卡，找到所有猫咪</p>
+          </div>
+        </section>
+
+        <section class="seed-box" aria-label="无限关卡设置">
+          <div class="seed-line">
+            <input class="seed-input" id="seedInput" maxlength="24" aria-label="关卡种子" />
+            <button class="tool-button" type="button" id="seedButton">换种子</button>
+          </div>
+          <button class="tool-button" type="button" id="randomButton">随机世界</button>
+        </section>
+
+        <section class="stats" aria-label="当前进度">
+          <div class="stat"><span>已确认</span><strong id="foundStat">0/0</strong></div>
+          <div class="stat"><span>剩余机会</span><strong id="lifeStat">3</strong></div>
+          <div class="stat"><span>可用提示</span><strong id="hintStat">3</strong></div>
+          <div class="stat"><span>固定线索</span><strong id="givenStat">0</strong></div>
+          <div class="stat"><span>最高闯关</span><strong id="bestStat">1</strong></div>
+        </section>
+
+        <section class="records" aria-label="历史记录与排行">
+          <div class="records-title"><span>历史排行</span><button class="tool-button" type="button" id="clearRecordsButton">清空</button></div>
+          <div class="record-list" id="recordList"></div>
+        </section>
+
+        <section class="rules" aria-label="推理规则">
+          <div class="rule"><span class="rule-mark">1</span><span>答案列由公式 c=(a×r+b) mod n 生成，a 与 n 互质，因此每行每列各一只。</span></div>
+          <div class="rule"><span class="rule-mark">2</span><span>每个颜色区域刚好对应一只猫，区域由答案点向外随机生长。</span></div>
+          <div class="rule"><span class="rule-mark">3</span><span>系统枚举所有候选解，并自动补便便线索直到当前关唯一解。</span></div>
+        </section>
+
+        <section class="controls" aria-label="游戏控制">
+          <button class="primary-button" type="button" id="checkButton">提交判断</button>
+          <button class="tool-button" type="button" id="resetButton">重开</button>
+          <button class="tool-button" type="button" id="nextButton">下一关</button>
+        </section>
+      </aside>
+
+      <section class="stage">
+        <header class="topbar">
+          <button class="round-button" type="button" id="prevButton" aria-label="上一关">‹</button>
+          <div class="level-title">
+            <strong id="levelName">第 1 关</strong>
+            <span id="levelTheme">生成中</span>
+          </div>
+          <button class="round-button" type="button" id="settingsButton" aria-label="切换便便排除模式">💩</button>
+        </header>
+
+        <section class="score-row" aria-label="状态摘要">
+          <div class="pill"><span aria-hidden="true">🐈‍⬛</span><span id="catCount">0/0</span></div>
+          <div class="pill"><span class="hearts" id="heartDisplay">♥♥♥</span></div>
+          <div class="pill"><small>模式</small><span id="modeLabel">找猫</span></div>
+          <div class="pill"><small>棋盘</small><span id="sizeLabel">6×6</span></div>
+        </section>
+
+        <section class="logic-strip" aria-label="关卡条件">
+          <div class="logic-item" id="formulaLabel">c=(a×r+b) mod n</div>
+          <div class="logic-item">同行同列各一只</div>
+          <div class="logic-item">唯一解自动校验</div>
+        </section>
+
+        <section class="board-wrap" aria-label="游戏棋盘">
+          <div class="board" id="board"></div>
+          <div class="overlay" id="overlay" aria-live="polite">
+            <div class="toast">
+              <strong id="toastTitle"></strong><span id="toastText"></span>
+              <div class="result-actions" id="resultActions">
+                <button class="result-button primary" type="button" id="resultNextButton">继续下一关</button>
+                <button class="result-button" type="button" id="resultRetryButton">重新挑战</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tool-row" aria-label="操作工具">
+          <button class="tool-button active" type="button" id="markModeButton"><span aria-hidden="true">🐈‍⬛</span>找猫</button>
+          <button class="tool-button" type="button" id="blockModeButton"><span aria-hidden="true">💩</span>排除</button>
+          <button class="tool-button" type="button" id="hintButton"><span aria-hidden="true">💡</span>提示 <span class="bubble" id="hintBubble">3</span></button>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const palette = ["pink", "green", "teal", "orange", "blue", "gold", "violet", "rose"];
+      const themes = ["暖身推理", "斜线陷阱", "彩区连锁", "猫砂迷宫", "尾巴回环", "午睡谜题", "胡须矩阵", "夜巡棋盘"];
+
+      const state = {
+        seed: localStorage.getItem("meo-seed") || "meow-2026",
+        levelNumber: Number(localStorage.getItem("meo-level") || 1),
+        mode: "mark",
+        lives: 3,
+        hints: 0,
+        marks: new Set(),
+        blocks: new Set(),
+        revealed: new Set(),
+        locked: false,
+        level: null,
+        runBest: Number(localStorage.getItem("meo-run-best") || 1),
+        records: JSON.parse(localStorage.getItem("meo-records") || "[]"),
+        mobileView: localStorage.getItem("meo-mobile-view") || "info",
+      };
+
+      let toastTimer = 0;
+
+      const board = document.querySelector("#board");
+      const overlay = document.querySelector("#overlay");
+      const toastTitle = document.querySelector("#toastTitle");
+      const toastText = document.querySelector("#toastText");
+      const foundStat = document.querySelector("#foundStat");
+      const lifeStat = document.querySelector("#lifeStat");
+      const hintStat = document.querySelector("#hintStat");
+      const givenStat = document.querySelector("#givenStat");
+      const bestStat = document.querySelector("#bestStat");
+      const recordList = document.querySelector("#recordList");
+      const hintBubble = document.querySelector("#hintBubble");
+      const catCount = document.querySelector("#catCount");
+      const heartDisplay = document.querySelector("#heartDisplay");
+      const levelName = document.querySelector("#levelName");
+      const levelTheme = document.querySelector("#levelTheme");
+      const modeLabel = document.querySelector("#modeLabel");
+      const sizeLabel = document.querySelector("#sizeLabel");
+      const formulaLabel = document.querySelector("#formulaLabel");
+      const seedInput = document.querySelector("#seedInput");
+      const markModeButton = document.querySelector("#markModeButton");
+      const blockModeButton = document.querySelector("#blockModeButton");
+      const infoTab = document.querySelector("#infoTab");
+      const boardTab = document.querySelector("#boardTab");
+
+      function keyOf(row, col) {
+        return `${row}-${col}`;
+      }
+
+      function hashString(text) {
+        let hash = 2166136261;
+        for (let i = 0; i < text.length; i += 1) {
+          hash ^= text.charCodeAt(i);
+          hash = Math.imul(hash, 16777619);
+        }
+        return hash >>> 0;
+      }
+
+      function createRandom(seedText) {
+        let value = hashString(seedText) || 1;
+        return function next() {
+          value ^= value << 13;
+          value ^= value >>> 17;
+          value ^= value << 5;
+          return (value >>> 0) / 4294967296;
+        };
+      }
+
+      function pick(random, items) {
+        return items[Math.floor(random() * items.length)];
+      }
+
+      function shuffle(items, random) {
+        const result = [...items];
+        for (let i = result.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(random() * (i + 1));
+          [result[i], result[j]] = [result[j], result[i]];
+        }
+        return result;
+      }
+
+      function gcd(a, b) {
+        while (b !== 0) [a, b] = [b, a % b];
+        return Math.abs(a);
+      }
+
+      function generateLevel(seed, levelNumber) {
+        for (let attempt = 0; attempt < 80; attempt += 1) {
+          const random = createRandom(`${seed}:${levelNumber}:${attempt}`);
+          const size = 6 + Math.floor(random() * 3);
+          const steps = [];
+          for (let step = 1; step < size; step += 1) {
+            if (gcd(step, size) === 1) steps.push(step);
+          }
+          const a = pick(random, steps);
+          const b = Math.floor(random() * size);
+          const cats = Array.from({ length: size }, (_, row) => [row, (a * row + b) % size]);
+          const colors = buildRegions(size, cats, random);
+          const givens = deriveUniqueGivens({ size, colors, cats }, random);
+          if (givens) {
+            return {
+              name: `第 ${levelNumber} 关`,
+              theme: `${pick(random, themes)} · 种子 ${seed}`,
+              size,
+              hints: Math.max(3, size - 3),
+              colors,
+              cats,
+              givens,
+              formula: `c=(${a}×r+${b}) mod ${size}`,
+              attempt,
+            };
+          }
+        }
+        throw new Error("关卡生成失败，请更换种子");
+      }
+
+      function buildRegions(size, cats, random) {
+        const colors = Array.from({ length: size }, () => Array(size).fill(null));
+        const frontiers = cats.map(([row, col], colorIndex) => {
+          colors[row][col] = colorIndex;
+          return [[row, col]];
+        });
+        let remaining = size * size - cats.length;
+        while (remaining > 0) {
+          const order = shuffle([...Array(size).keys()], random);
+          let progressed = false;
+          for (const colorIndex of order) {
+            const candidates = [];
+            for (const [row, col] of frontiers[colorIndex]) {
+              for (const [nextRow, nextCol] of neighbors(row, col, size)) {
+                if (colors[nextRow][nextCol] === null) candidates.push([nextRow, nextCol]);
+              }
+            }
+            if (candidates.length === 0) continue;
+            const [row, col] = pick(random, candidates);
+            colors[row][col] = colorIndex;
+            frontiers[colorIndex].push([row, col]);
+            remaining -= 1;
+            progressed = true;
+            if (random() < 0.52) break;
+          }
+          if (!progressed) {
+            for (let row = 0; row < size; row += 1) {
+              for (let col = 0; col < size; col += 1) {
+                if (colors[row][col] !== null) continue;
+                const adjacent = neighbors(row, col, size).map(([r, c]) => colors[r][c]).filter((value) => value !== null);
+                const colorIndex = adjacent.length ? pick(random, adjacent) : Math.floor(random() * size);
+                colors[row][col] = colorIndex;
+                frontiers[colorIndex].push([row, col]);
+                remaining -= 1;
+              }
+            }
+          }
+        }
+        return colors.map((row) => row.map((colorIndex) => palette[colorIndex % palette.length]));
+      }
+
+      function neighbors(row, col, size) {
+        return [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]].filter(([r, c]) => r >= 0 && r < size && c >= 0 && c < size);
+      }
+
+      function deriveUniqueGivens(level, random) {
+        const answers = catKeys(level);
+        const blocks = new Set();
+        const candidates = shuffle(allKeys(level.size).filter((key) => !answers.has(key)), random);
+        for (let step = 0; step < level.size * level.size; step += 1) {
+          const solutions = solveLevel(level, blocks, 2);
+          if (solutions.length === 1 && sameSolution(solutions[0], answers)) {
+            return [...blocks].map(parseKey);
+          }
+          const badSolutions = solutions.filter((solution) => !sameSolution(solution, answers));
+          const frequency = new Map();
+          for (const solution of badSolutions) {
+            for (const key of solution) {
+              if (!answers.has(key) && !blocks.has(key)) frequency.set(key, (frequency.get(key) || 0) + 1);
+            }
+          }
+          const best = [...frequency.entries()].sort((left, right) => right[1] - left[1])[0]?.[0];
+          const fallback = candidates.find((key) => !blocks.has(key));
+          const next = best || fallback;
+          if (!next) return null;
+          blocks.add(next);
+        }
+        return null;
+      }
+
+      function solveLevel(level, blocked, limit = 2) {
+        const colorOrder = [...new Set(level.colors.flat())];
+        const cellsByColor = new Map(colorOrder.map((color) => [color, []]));
+        for (let row = 0; row < level.size; row += 1) {
+          for (let col = 0; col < level.size; col += 1) {
+            cellsByColor.get(level.colors[row][col]).push([row, col]);
+          }
+        }
+        colorOrder.sort((left, right) => cellsByColor.get(left).length - cellsByColor.get(right).length);
+        const solutions = [];
+        function search(index, rows, cols, chosen) {
+          if (solutions.length >= limit) return;
+          if (index === colorOrder.length) {
+            solutions.push(new Set(chosen));
+            return;
+          }
+          for (const [row, col] of cellsByColor.get(colorOrder[index])) {
+            const key = keyOf(row, col);
+            if (blocked.has(key) || rows.has(row) || cols.has(col)) continue;
+            rows.add(row);
+            cols.add(col);
+            chosen.push(key);
+            search(index + 1, rows, cols, chosen);
+            chosen.pop();
+            rows.delete(row);
+            cols.delete(col);
+          }
+        }
+        search(0, new Set(), new Set(), []);
+        return solutions;
+      }
+
+      function sameSolution(solution, answers) {
+        if (solution.size !== answers.size) return false;
+        for (const key of solution) if (!answers.has(key)) return false;
+        return true;
+      }
+
+      function allKeys(size) {
+        const keys = [];
+        for (let row = 0; row < size; row += 1) {
+          for (let col = 0; col < size; col += 1) keys.push(keyOf(row, col));
+        }
+        return keys;
+      }
+
+      function parseKey(key) {
+        return key.split("-").map(Number);
+      }
+
+      function currentLevel() {
+        return state.level;
+      }
+
+      function catKeys(level = currentLevel()) {
+        return new Set(level.cats.map(([row, col]) => keyOf(row, col)));
+      }
+
+      function colorAt(level, key) {
+        const [row, col] = parseKey(key);
+        return level.colors[row][col];
+      }
+
+      function givenKeys(level = currentLevel()) {
+        return new Set((level.givens || []).map(([row, col]) => keyOf(row, col)));
+      }
+
+      function validateLevel(level) {
+        const answers = catKeys(level);
+        const colors = new Set(level.colors.flat());
+        const catColors = level.cats.map(([row, col]) => level.colors[row][col]);
+        const hasBadShape = level.colors.length !== level.size || level.colors.some((row) => row.length !== level.size);
+        const hasBlockedAnswer = [...givenKeys(level)].some((key) => answers.has(key));
+        const solutions = solveLevel(level, givenKeys(level), 2);
+        if (
+          hasBadShape ||
+          colors.size !== level.cats.length ||
+          new Set(level.cats.map(([row]) => row)).size !== level.cats.length ||
+          new Set(level.cats.map(([, col]) => col)).size !== level.cats.length ||
+          new Set(catColors).size !== colors.size ||
+          hasBlockedAnswer ||
+          solutions.length !== 1 ||
+          !sameSolution(solutions[0], answers)
+        ) {
+          throw new Error(`${level.name} 的关卡数据不符合唯一解规则`);
+        }
+      }
+
+      function loadLevel(levelNumber = state.levelNumber) {
+        state.levelNumber = Math.max(1, levelNumber);
+        state.level = generateLevel(state.seed, state.levelNumber);
+        validateLevel(state.level);
+        localStorage.setItem("meo-seed", state.seed);
+        localStorage.setItem("meo-level", String(state.levelNumber));
+        resetLevel();
+      }
+
+      function resetLevel() {
+        const level = currentLevel();
+        state.lives = 3;
+        state.hints = level.hints;
+        state.marks = new Set();
+        state.blocks = givenKeys(level);
+        state.revealed = new Set();
+        state.locked = false;
+        hideToast();
+        render();
+      }
+
+      function conflictingMarks(level = currentLevel()) {
+        const rows = new Map();
+        const cols = new Map();
+        const colors = new Map();
+        state.marks.forEach((key) => {
+          const [row, col] = parseKey(key);
+          const color = colorAt(level, key);
+          rows.set(row, [...(rows.get(row) || []), key]);
+          cols.set(col, [...(cols.get(col) || []), key]);
+          colors.set(color, [...(colors.get(color) || []), key]);
+        });
+        const conflicts = new Set();
+        [rows, cols, colors].forEach((group) => {
+          group.forEach((keys) => {
+            if (keys.length > 1) keys.forEach((key) => conflicts.add(key));
+          });
+        });
+        return conflicts;
+      }
+
+      function render() {
+        const level = currentLevel();
+        const totalCats = level.cats.length;
+        const conflicts = conflictingMarks(level);
+        const givens = givenKeys(level);
+        const found = [...state.marks].filter((key) => catKeys(level).has(key)).length;
+        seedInput.value = state.seed;
+        resizeBoard(level.size);
+        board.innerHTML = "";
+        level.colors.forEach((rowColors, row) => {
+          rowColors.forEach((color, col) => {
+            const key = keyOf(row, col);
+            const cell = document.createElement("button");
+            cell.type = "button";
+            cell.className = `cell color-${color}`;
+            cell.setAttribute("aria-label", `${row + 1} 行 ${col + 1} 列`);
+            cell.dataset.row = row;
+            cell.dataset.col = col;
+            if (state.blocks.has(key)) {
+              cell.classList.add("blocked");
+              cell.appendChild(createPoopFace(row, col));
+            }
+            if (givens.has(key)) cell.classList.add("given");
+            if (conflicts.has(key)) cell.classList.add("conflict");
+            if (state.marks.has(key) || state.revealed.has(key)) {
+              cell.classList.add(state.revealed.has(key) ? "revealed" : "marked");
+              cell.appendChild(createCatFace());
+            }
+            board.appendChild(cell);
+          });
+        });
+        foundStat.textContent = `${found}/${totalCats}`;
+        catCount.textContent = `${state.marks.size}/${totalCats}`;
+        lifeStat.textContent = state.lives;
+        hintStat.textContent = state.hints;
+        hintBubble.textContent = state.hints;
+        givenStat.textContent = givens.size;
+        bestStat.textContent = state.runBest;
+        heartDisplay.textContent = "♥".repeat(state.lives) + "♡".repeat(3 - state.lives);
+        levelName.textContent = level.name;
+        levelTheme.textContent = level.theme;
+        sizeLabel.textContent = `${level.size}×${level.size}`;
+        formulaLabel.textContent = level.formula;
+        modeLabel.textContent = state.mode === "mark" ? "找猫" : "排除";
+        markModeButton.classList.toggle("active", state.mode === "mark");
+        blockModeButton.classList.toggle("active", state.mode === "block");
+        renderRecords();
+        renderMobileView();
+      }
+
+      function resizeBoard(size = currentLevel().size) {
+        const wrap = board.parentElement;
+        const max = Math.max(240, Math.floor(Math.min(wrap.clientWidth || 640, wrap.clientHeight || 640)));
+        const gap = max < 360 ? 4 : 6;
+        const padding = max < 360 ? 6 : 8;
+        const cellSize = Math.floor((max - padding * 2 - gap * (size - 1)) / size);
+        const boardSize = cellSize * size + gap * (size - 1) + padding * 2;
+        board.style.width = `${boardSize}px`;
+        board.style.height = `${boardSize}px`;
+        board.style.gap = `${gap}px`;
+        board.style.padding = `${padding}px`;
+        board.style.gridTemplateColumns = `repeat(${size}, ${cellSize}px)`;
+        board.style.gridTemplateRows = `repeat(${size}, ${cellSize}px)`;
+        board.style.setProperty("--cell-size", `${cellSize}px`);
+      }
+
+      function renderRecords() {
+        const records = [...state.records].sort((left, right) => right.level - left.level || right.time - left.time).slice(0, 8);
+        if (records.length === 0) {
+          recordList.innerHTML = '<div class="record-item"><span class="record-rank">-</span><span>暂无记录，先通一关吧</span><strong>0</strong></div>';
+          return;
+        }
+        recordList.innerHTML = records
+          .map((record, index) => `<div class="record-item"><span class="record-rank">${index + 1}</span><span>${record.seed}</span><strong>${record.level} 关</strong></div>`)
+          .join("");
+      }
+
+      function saveRecord(status) {
+        const record = {
+          seed: state.seed,
+          level: status === "win" ? state.levelNumber : Math.max(1, state.levelNumber - 1),
+          status,
+          time: Date.now(),
+        };
+        state.records = [record, ...state.records].sort((left, right) => right.level - left.level || right.time - left.time).slice(0, 20);
+        localStorage.setItem("meo-records", JSON.stringify(state.records));
+        if (record.level > state.runBest) {
+          state.runBest = record.level;
+          localStorage.setItem("meo-run-best", String(state.runBest));
+        }
+        bestStat.textContent = state.runBest;
+        renderRecords();
+      }
+
+      function setMobileView(view) {
+        state.mobileView = view;
+        localStorage.setItem("meo-mobile-view", view);
+        renderMobileView();
+        window.setTimeout(() => resizeBoard(), 80);
+      }
+
+      function renderMobileView() {
+        document.body.classList.toggle("mobile-info", state.mobileView === "info");
+        document.body.classList.toggle("mobile-board", state.mobileView === "board");
+        infoTab.classList.toggle("active", state.mobileView === "info");
+        boardTab.classList.toggle("active", state.mobileView === "board");
+      }
+
+      function createCatFace() {
+        const face = document.createElement("span");
+        face.className = "cat-face";
+        face.innerHTML = '<span class="cat-eyes"><i></i><i></i></span><span class="cat-muzzle"></span>';
+        return face;
+      }
+
+      function createPoopFace(row, col) {
+        const face = document.createElement("span");
+        face.className = "poop-face";
+        face.innerHTML = '<span class="poop-eyes"><i></i><i></i></span>';
+        face.style.setProperty("--poop-delay", `${-((row * 0.23 + col * 0.17) % 2.6)}s`);
+        face.style.setProperty("--blink-delay", `${-((row * 0.41 + col * 0.29) % 3.1)}s`);
+        return face;
+      }
+
+      function toggleCell(row, col) {
+        if (state.locked) return;
+        const key = keyOf(row, col);
+        if (state.revealed.has(key)) return;
+        if (givenKeys().has(key)) {
+          showToast("固定线索", "这坨便便是关卡给出的排除线索，不能取消。", false);
+          return;
+        }
+        if (state.mode === "mark") {
+          state.blocks.delete(key);
+          if (state.marks.has(key)) {
+            state.marks.delete(key);
+          } else if (state.marks.size >= currentLevel().cats.length) {
+            showToast("数量已满", "先取消一个猫咪标记，再选择新的位置。", false);
+            return;
+          } else {
+            state.marks.add(key);
+          }
+        } else {
+          state.marks.delete(key);
+          state.blocks.has(key) ? state.blocks.delete(key) : state.blocks.add(key);
+        }
+        hideToast();
+        render();
+      }
+
+      function checkAnswer() {
+        if (state.locked) return;
+        const level = currentLevel();
+        const answers = catKeys(level);
+        const marks = state.marks;
+        const conflicts = conflictingMarks(level);
+        const allFound = level.cats.every(([row, col]) => marks.has(keyOf(row, col)));
+        const noExtra = [...marks].every((key) => answers.has(key));
+        if (conflicts.size > 0) {
+          showToast("规则冲突", "同一行、同一列或同一种颜色里出现了重复猫咪。", false);
+          return;
+        }
+        if (marks.size < level.cats.length) {
+          showToast("还差一点", `需要标出 ${level.cats.length} 只猫，现在标了 ${marks.size} 只。`);
+          return;
+        }
+        if (allFound && noExtra) {
+          state.locked = true;
+          saveRecord("win");
+          showResult("通关成功", "所有猫咪都被准确找到了，要继续下一关还是重新挑战本关？", "win");
+          return;
+        }
+        state.lives -= 1;
+        if (state.lives <= 0) {
+          state.locked = true;
+          state.revealed = answers;
+          render();
+          saveRecord("lose");
+          showResult("机会用完", "答案已经揭晓，可以重新挑战本关，或继续下一关练手。", "lose");
+        } else {
+          showToast("有误判", "至少有一个猫咪位置不对，继续用排除法收窄范围。", false);
+          render();
+        }
+      }
+
+      function useHint() {
+        if (state.locked || state.hints <= 0) return;
+        const answerSet = catKeys();
+        const target = [...answerSet].find((key) => !state.marks.has(key) && !state.revealed.has(key));
+        if (!target) {
+          showToast("提示", "你已经标出了所有猫咪，提交判断吧。", false);
+          return;
+        }
+        const wrongMark = [...state.marks].find((key) => !answerSet.has(key));
+        if (wrongMark) state.marks.delete(wrongMark);
+        state.hints -= 1;
+        state.revealed.add(target);
+        state.blocks.delete(target);
+        state.marks.add(target);
+        render();
+        showToast("提示已生效", "一只猫咪的位置已经帮你确认。", false);
+      }
+
+      function switchLevel(nextNumber) {
+        loadLevel(nextNumber);
+      }
+
+      function setMode(mode) {
+        state.mode = mode;
+        render();
+      }
+
+      function applySeed(seed) {
+        state.seed = (seed || "meow").trim() || "meow";
+        loadLevel(1);
+      }
+
+      function randomSeed() {
+        const value = `meow-${Math.random().toString(36).slice(2, 8)}`;
+        applySeed(value);
+      }
+
+      function showToast(title, text, persistent = false) {
+        window.clearTimeout(toastTimer);
+        overlay.classList.remove("result");
+        toastTitle.textContent = title;
+        toastText.textContent = text;
+        overlay.classList.add("show");
+        if (!persistent) toastTimer = window.setTimeout(hideToast, 1800);
+      }
+
+      function showResult(title, text) {
+        window.clearTimeout(toastTimer);
+        toastTitle.textContent = title;
+        toastText.textContent = text;
+        overlay.classList.add("show", "result");
+      }
+
+      function hideToast() {
+        window.clearTimeout(toastTimer);
+        overlay.classList.remove("show", "result");
+      }
+
+      board.addEventListener("click", (event) => {
+        const cell = event.target.closest(".cell");
+        if (!cell) return;
+        toggleCell(Number(cell.dataset.row), Number(cell.dataset.col));
+      });
+
+      document.querySelector("#checkButton").addEventListener("click", checkAnswer);
+      document.querySelector("#resetButton").addEventListener("click", resetLevel);
+      document.querySelector("#nextButton").addEventListener("click", () => switchLevel(state.levelNumber + 1));
+      document.querySelector("#prevButton").addEventListener("click", () => switchLevel(state.levelNumber - 1));
+      document.querySelector("#settingsButton").addEventListener("click", () => setMode(state.mode === "mark" ? "block" : "mark"));
+      document.querySelector("#resultNextButton").addEventListener("click", () => switchLevel(state.levelNumber + 1));
+      document.querySelector("#resultRetryButton").addEventListener("click", resetLevel);
+      document.querySelector("#clearRecordsButton").addEventListener("click", () => {
+        state.records = [];
+        localStorage.setItem("meo-records", "[]");
+        renderRecords();
+      });
+      infoTab.addEventListener("click", () => setMobileView("info"));
+      boardTab.addEventListener("click", () => setMobileView("board"));
+      markModeButton.addEventListener("click", () => setMode("mark"));
+      blockModeButton.addEventListener("click", () => setMode("block"));
+      document.querySelector("#hintButton").addEventListener("click", useHint);
+      document.querySelector("#seedButton").addEventListener("click", () => applySeed(seedInput.value));
+      document.querySelector("#randomButton").addEventListener("click", randomSeed);
+      seedInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") applySeed(seedInput.value);
+      });
+      window.addEventListener("resize", () => resizeBoard());
+      window.addEventListener("orientationchange", () => window.setTimeout(() => resizeBoard(), 180));
+
+      loadLevel(state.levelNumber);
+    </script>
+  </body>
+</html>
