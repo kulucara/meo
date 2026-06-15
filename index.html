@@ -554,10 +554,10 @@
 
       .cat-face {
         position: relative;
-        width: 74%;
+        width: 92%;
         aspect-ratio: 1;
         display: block;
-        filter: drop-shadow(0 5px 9px rgba(77, 48, 45, 0.16));
+        filter: drop-shadow(0 3px 5px rgba(77, 48, 45, 0.14));
       }
 
       .cat-face svg {
@@ -1389,23 +1389,23 @@
         const face = document.createElement("span");
         face.className = "cat-face";
         face.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-          <path d="M18 43 C13 24 16 8 24 7 C33 13 40 22 45 31 C48 30 52 30 55 31 C60 22 67 13 76 7 C84 8 87 24 82 43 C89 51 91 62 88 73 C83 90 68 98 50 98 C32 98 17 90 12 73 C9 62 11 51 18 43 Z" fill="#202226" stroke="#161719" stroke-width="4" stroke-linejoin="round"/>
-          <path d="M23 13 C31 20 37 27 41 35 C30 33 23 29 18 43 C16 30 17 18 23 13 Z" fill="#f2795f" opacity="0.92"/>
-          <path d="M77 13 C69 20 63 27 59 35 C70 33 77 29 82 43 C84 30 83 18 77 13 Z" fill="#f2795f" opacity="0.92"/>
-          <path d="M50 23 C54 39 58 55 64 77 C59 83 55 87 50 88 C45 87 41 83 36 77 C42 55 46 39 50 23 Z" fill="#fff0d3"/>
-          <path d="M17 64 C21 82 34 95 50 95 C66 95 79 82 83 64 C75 87 62 94 50 94 C38 94 25 87 17 64 Z" fill="#fff0d3"/>
-          <ellipse cx="33" cy="55" rx="12" ry="15" fill="#f2a629" stroke="#2b211f" stroke-width="3"/>
-          <ellipse cx="67" cy="55" rx="12" ry="15" fill="#f2a629" stroke="#2b211f" stroke-width="3"/>
-          <ellipse cx="35" cy="55" rx="5" ry="8" fill="#171313"/>
-          <ellipse cx="65" cy="55" rx="5" ry="8" fill="#171313"/>
-          <circle cx="38" cy="49" r="2.2" fill="#fff7d8"/>
-          <circle cx="68" cy="49" r="2.2" fill="#fff7d8"/>
-          <path d="M43 36 C40 34 37 34 34 37" fill="none" stroke="#171719" stroke-width="2.4" stroke-linecap="round" opacity="0.55"/>
-          <path d="M57 36 C60 34 63 34 66 37" fill="none" stroke="#171719" stroke-width="2.4" stroke-linecap="round" opacity="0.55"/>
-          <path d="M44 68 Q50 63 56 68 Q54 73 50 74 Q46 73 44 68 Z" fill="#f2847f" stroke="#2b211f" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M50 74 C50 80 45 83 40 79" fill="none" stroke="#2b211f" stroke-width="2.4" stroke-linecap="round"/>
-          <path d="M50 74 C50 80 55 83 60 79" fill="none" stroke="#2b211f" stroke-width="2.4" stroke-linecap="round"/>
-          <path d="M15 62 L35 60 M15 71 L35 68 M85 62 L65 60 M85 71 L65 68" fill="none" stroke="#171719" stroke-width="2.4" stroke-linecap="round" opacity="0.78"/>
+          <path d="M18 42 C12 22 15 5 25 4 C34 12 40 23 44 33 C48 32 52 32 56 33 C60 23 66 12 75 4 C85 5 88 22 82 42 C90 49 93 61 89 73 C84 90 68 98 50 98 C32 98 16 90 11 73 C7 61 10 49 18 42 Z" fill="#202226" stroke="#161719" stroke-width="4.6" stroke-linejoin="round"/>
+          <path d="M24 11 C31 19 36 28 39 37 C30 34 23 31 18 42 C16 29 18 16 24 11 Z" fill="#f28769" stroke="#161719" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M76 11 C69 19 64 28 61 37 C70 34 77 31 82 42 C84 29 82 16 76 11 Z" fill="#f28769" stroke="#161719" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M50 22 C54 39 58 55 63 76 C59 85 54 90 50 92 C46 90 41 85 37 76 C42 55 46 39 50 22 Z" fill="#fff0d3"/>
+          <path d="M15 65 C19 84 33 96 50 96 C67 96 81 84 85 65 C78 90 64 98 50 98 C36 98 22 90 15 65 Z" fill="#fff0d3"/>
+          <ellipse cx="32" cy="54" rx="12.4" ry="15.2" fill="#f2a62e" stroke="#241c1d" stroke-width="3.1"/>
+          <ellipse cx="68" cy="54" rx="12.4" ry="15.2" fill="#f2a62e" stroke="#241c1d" stroke-width="3.1"/>
+          <ellipse cx="34" cy="54" rx="4.5" ry="8.4" fill="#141112"/>
+          <ellipse cx="66" cy="54" rx="4.5" ry="8.4" fill="#141112"/>
+          <circle cx="37" cy="48" r="2.1" fill="#fff8df"/>
+          <circle cx="69" cy="48" r="2.1" fill="#fff8df"/>
+          <path d="M41 37 C38 34 34 34 31 37" fill="none" stroke="#161719" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+          <path d="M59 37 C62 34 66 34 69 37" fill="none" stroke="#161719" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+          <path d="M43 69 Q50 64 57 69 Q54 74 50 75 Q46 74 43 69 Z" fill="#f38480" stroke="#241c1d" stroke-width="2.1" stroke-linejoin="round"/>
+          <path d="M50 75 C50 81 45 84 40 80" fill="none" stroke="#241c1d" stroke-width="2.3" stroke-linecap="round"/>
+          <path d="M50 75 C50 81 55 84 60 80" fill="none" stroke="#241c1d" stroke-width="2.3" stroke-linecap="round"/>
+          <path d="M8 62 L35 60 M9 72 L35 68 M92 62 L65 60 M91 72 L65 68" fill="none" stroke="#161719" stroke-width="2.4" stroke-linecap="round" opacity="0.82"/>
         </svg>`;
         return face;
       }
