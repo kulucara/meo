@@ -554,15 +554,15 @@
 
       .cat-face {
         position: relative;
-        width: 68%;
+        width: 74%;
         aspect-ratio: 1;
         display: grid;
         place-items: center;
-        border-radius: 48% 48% 52% 52%;
-        background: linear-gradient(180deg, #313339 0%, #25272c 100%);
+        border-radius: 46% 46% 54% 54%;
+        background: linear-gradient(180deg, #27292e 0%, #202226 100%);
         box-shadow:
-          inset 0 -4px 0 rgba(0, 0, 0, 0.1),
-          0 5px 10px rgba(77, 48, 45, 0.13);
+          inset 0 -4px 0 rgba(0, 0, 0, 0.12),
+          0 5px 10px rgba(77, 48, 45, 0.14);
         isolation: isolate;
       }
 
@@ -570,70 +570,125 @@
       .cat-face::after {
         content: "";
         position: absolute;
-        top: -8%;
-        width: 29%;
-        height: 30%;
-        background: #303238;
+        top: -14%;
+        width: 33%;
+        height: 39%;
+        background:
+          linear-gradient(135deg, transparent 0 31%, #f47f62 32% 51%, transparent 52%),
+          #202226;
         clip-path: polygon(50% 0, 100% 100%, 0 100%);
         z-index: -1;
       }
 
       .cat-face::before {
-        left: 12%;
-        transform: rotate(-10deg);
+        left: 6%;
+        transform: rotate(-18deg);
       }
 
       .cat-face::after {
-        right: 12%;
-        transform: rotate(10deg);
+        right: 6%;
+        transform: rotate(18deg);
+      }
+
+      .cat-blaze {
+        position: absolute;
+        top: -2%;
+        left: 50%;
+        width: 22%;
+        height: 62%;
+        background: #fff3df;
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        transform: translateX(-50%);
+        z-index: 0;
+      }
+
+      .cat-cheeks {
+        position: absolute;
+        left: 50%;
+        bottom: -1%;
+        width: 82%;
+        height: 43%;
+        border-radius: 50% 50% 46% 46%;
+        background: #fff1d5;
+        transform: translateX(-50%);
+        z-index: 0;
       }
 
       .cat-eyes {
-        width: 48%;
+        position: relative;
+        z-index: 2;
+        width: 62%;
         display: flex;
         justify-content: space-between;
-        transform: translateY(-18%);
+        transform: translateY(-5%);
       }
 
       .cat-eyes i {
-        width: 24%;
+        width: 33%;
         aspect-ratio: 1;
         border-radius: 50%;
-        background: #fff0ad;
+        background: #f5aa31;
+        box-shadow: inset 0 0 0 2px #2a1f1d;
         position: relative;
       }
 
       .cat-eyes i::after {
-        display: none;
+        content: "";
+        position: absolute;
+        left: 52%;
+        top: 48%;
+        width: 42%;
+        height: 58%;
+        border-radius: 50%;
+        background: #211917;
+        transform: translate(-50%, -50%);
+        box-shadow: 0.18em -0.18em 0 -0.09em #fff8db;
       }
 
       .cat-muzzle {
         position: absolute;
         left: 50%;
-        top: 55%;
-        width: 9%;
-        height: 7%;
+        top: 62%;
+        width: 13%;
+        height: 10%;
         border-radius: 55% 55% 65% 65%;
-        background: #ff93a8;
+        background: #f07f7e;
         transform: translateX(-50%);
+        z-index: 3;
       }
 
       .cat-muzzle::before {
-        display: none;
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 70%;
+        width: 1px;
+        height: 95%;
+        background: #342829;
+        transform: translateX(-50%);
       }
 
       .cat-muzzle::after {
-        display: none;
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 142%;
+        width: 170%;
+        height: 80%;
+        border-bottom: 2px solid #342829;
+        border-radius: 0 0 999px 999px;
+        transform: translateX(-50%);
       }
 
       .cat-whiskers {
         position: absolute;
         left: 50%;
-        top: 58%;
-        width: 64%;
-        height: 12%;
+        top: 63%;
+        width: 88%;
+        height: 14%;
         transform: translateX(-50%);
         pointer-events: none;
+        z-index: 2;
       }
 
       .cat-whiskers::before,
@@ -641,19 +696,20 @@
         content: "";
         position: absolute;
         top: 50%;
-        width: 24%;
-        height: 1.5px;
-        background: rgba(255, 242, 226, 0.86);
+        width: 29%;
+        height: 2px;
+        background: rgba(35, 30, 30, 0.72);
+        box-shadow: 0 0.42em 0 rgba(35, 30, 30, 0.58);
       }
 
       .cat-whiskers::before {
         left: 0;
-        transform: rotate(6deg);
+        transform: rotate(4deg);
       }
 
       .cat-whiskers::after {
         right: 0;
-        transform: rotate(-6deg);
+        transform: rotate(-4deg);
       }
 
       .overlay {
@@ -1477,7 +1533,7 @@
       function createCatFace() {
         const face = document.createElement("span");
         face.className = "cat-face";
-        face.innerHTML = '<span class="cat-eyes"><i></i><i></i></span><span class="cat-muzzle"></span><span class="cat-whiskers"></span>';
+        face.innerHTML = '<span class="cat-blaze"></span><span class="cat-cheeks"></span><span class="cat-eyes"><i></i><i></i></span><span class="cat-muzzle"></span><span class="cat-whiskers"></span>';
         return face;
       }
 
