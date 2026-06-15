@@ -17,19 +17,33 @@ html = html_path.read_text(encoding="utf-8")
 st.markdown(
     """
     <style>
-      #MainMenu, header, footer { display: none; }
+      #MainMenu, header, footer { display: none !important; }
       [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
-      [data-testid="stStatusWidget"], .stDeployButton, .stActionButton, .viewerBadge_container__1QSob {
+      [data-testid="stStatusWidget"], [data-testid="stToolbarActions"], [data-testid="collapsedControl"],
+      [data-testid="stBaseButton-header"], .stDeployButton, .stActionButton, .viewerBadge_container__1QSob {
         display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        overflow: hidden !important;
       }
       .block-container {
         max-width: 100%;
-        padding: 0;
+        padding: 0 !important;
       }
       html, body, [data-testid="stAppViewContainer"], .main, .stApp {
         height: 100%;
         overflow: hidden;
         background: transparent;
+      }
+      .stApp > div:first-child,
+      [data-testid="stAppViewContainer"] > section:first-child {
+        top: 0 !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
       }
       [data-testid="stAppViewBlockContainer"] {
         padding: 0 !important;
