@@ -17,7 +17,6 @@ html = html_path.read_text(encoding="utf-8")
 st.markdown(
     """
     <style>
-      :root { --streamlit-strip-fix: 64px; }
       #MainMenu, header, footer { display: none !important; }
       [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
       [data-testid="stStatusWidget"], [data-testid="stToolbarActions"], [data-testid="collapsedControl"],
@@ -49,27 +48,17 @@ st.markdown(
         padding: 0 !important;
       }
       html, body, [data-testid="stAppViewContainer"], .main, .stApp, [data-testid="stMain"] {
-        height: 100svh;
+        min-height: 100svh;
         overflow: hidden;
         background:
           radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.92) 0 12rem, transparent 12rem),
           linear-gradient(135deg, #f8ede8 0%, #eef7f4 54%, #fff6e3 100%) !important;
       }
-      .stApp {
-        margin-top: calc(var(--streamlit-strip-fix) * -1) !important;
-        height: calc(100svh + var(--streamlit-strip-fix)) !important;
-      }
-      [data-testid="stAppViewContainer"] {
-        top: calc(var(--streamlit-strip-fix) * -1) !important;
-        transform: translateY(calc(var(--streamlit-strip-fix) * -1));
-        height: calc(100svh + var(--streamlit-strip-fix) * 2) !important;
-      }
       .stApp > div:first-child,
       [data-testid="stAppViewContainer"] > section:first-child,
       section[data-testid="stMain"], section.main {
-        top: calc(var(--streamlit-strip-fix) * -1) !important;
         padding-top: 0 !important;
-        margin-top: calc(var(--streamlit-strip-fix) * -1) !important;
+        margin-top: 0 !important;
       }
       [data-testid="stAppViewBlockContainer"] {
         padding: 0 !important;
@@ -80,18 +69,18 @@ st.markdown(
         padding: 0 !important;
       }
       [data-testid="stVerticalBlock"], [data-testid="stElementContainer"] {
-        height: calc(100svh + var(--streamlit-strip-fix) * 2);
+        height: 100svh;
         overflow: hidden;
       }
       [data-testid="stElementContainer"] > div {
-        height: calc(100svh + var(--streamlit-strip-fix) * 2) !important;
+        height: 100svh !important;
         overflow: hidden !important;
       }
       iframe {
         display: block;
         width: 100% !important;
-        height: calc(100svh + var(--streamlit-strip-fix) * 2) !important;
-        min-height: calc(100svh + var(--streamlit-strip-fix) * 2) !important;
+        height: 100svh !important;
+        min-height: 100svh !important;
         border: 0 !important;
       }
     </style>
@@ -99,4 +88,4 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-components.html(html, height=1200, scrolling=False)
+components.html(html, height=980, scrolling=False)
