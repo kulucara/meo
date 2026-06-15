@@ -28,7 +28,10 @@
       html,
       body {
         margin: 0;
+        width: 100%;
+        height: 100%;
         min-height: 100%;
+        overflow: hidden;
       }
 
       body {
@@ -42,7 +45,7 @@
         display: grid;
         place-items: center;
         padding: 18px;
-        overflow: auto;
+        overflow: hidden;
       }
 
       button,
@@ -68,6 +71,18 @@
         display: grid;
         grid-template-columns: minmax(250px, 310px) 1fr;
         backdrop-filter: blur(16px);
+      }
+
+      @media (min-width: 881px) {
+        .game {
+          max-height: calc(100svh - 36px);
+        }
+
+        .sidebar,
+        .stage {
+          min-height: 0;
+          overflow: auto;
+        }
       }
 
       .mobile-tabs {
@@ -539,15 +554,15 @@
 
       .cat-face {
         position: relative;
-        width: 72%;
+        width: 68%;
         aspect-ratio: 1;
         display: grid;
         place-items: center;
-        border-radius: 44% 44% 48% 48%;
-        background: #2f3135;
+        border-radius: 48% 48% 52% 52%;
+        background: linear-gradient(180deg, #313339 0%, #25272c 100%);
         box-shadow:
-          inset 0 -5px 0 rgba(0, 0, 0, 0.1),
-          0 6px 12px rgba(77, 48, 45, 0.14);
+          inset 0 -4px 0 rgba(0, 0, 0, 0.1),
+          0 5px 10px rgba(77, 48, 45, 0.13);
         isolation: isolate;
       }
 
@@ -555,91 +570,68 @@
       .cat-face::after {
         content: "";
         position: absolute;
-        top: -11%;
-        width: 32%;
-        height: 34%;
-        background: #2f3135;
+        top: -8%;
+        width: 29%;
+        height: 30%;
+        background: #303238;
         clip-path: polygon(50% 0, 100% 100%, 0 100%);
         z-index: -1;
       }
 
       .cat-face::before {
-        left: 9%;
-        transform: rotate(-13deg);
+        left: 12%;
+        transform: rotate(-10deg);
       }
 
       .cat-face::after {
-        right: 9%;
-        transform: rotate(13deg);
+        right: 12%;
+        transform: rotate(10deg);
       }
 
       .cat-eyes {
-        width: 54%;
+        width: 48%;
         display: flex;
         justify-content: space-between;
-        transform: translateY(-8%);
+        transform: translateY(-18%);
       }
 
       .cat-eyes i {
-        width: 25%;
+        width: 24%;
         aspect-ratio: 1;
         border-radius: 50%;
-        background: #fff7e7;
+        background: #fff0ad;
         position: relative;
       }
 
       .cat-eyes i::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 38%;
-        height: 38%;
-        border-radius: 999px;
-        background: #171719;
-        transform: translate(-50%, -50%);
+        display: none;
       }
 
       .cat-muzzle {
         position: absolute;
         left: 50%;
-        bottom: 20%;
-        width: 34%;
-        height: 25%;
-        border-radius: 50%;
-        background: #fff2ea;
+        top: 55%;
+        width: 9%;
+        height: 7%;
+        border-radius: 55% 55% 65% 65%;
+        background: #ff93a8;
         transform: translateX(-50%);
       }
 
       .cat-muzzle::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 20%;
-        width: 24%;
-        height: 18%;
-        border-radius: 50% 50% 60% 60%;
-        background: #f17f97;
-        transform: translateX(-50%);
+        display: none;
       }
 
       .cat-muzzle::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 38%;
-        width: 1px;
-        height: 18%;
-        background: rgba(60, 43, 45, 0.72);
-        transform: translateX(-50%);
+        display: none;
       }
 
       .cat-whiskers {
         position: absolute;
         left: 50%;
-        bottom: 24%;
-        width: 78%;
-        height: 16%;
+        top: 58%;
+        width: 64%;
+        height: 12%;
         transform: translateX(-50%);
         pointer-events: none;
       }
@@ -648,20 +640,20 @@
       .cat-whiskers::after {
         content: "";
         position: absolute;
-        top: 46%;
-        width: 28%;
-        height: 2px;
-        background: rgba(255, 247, 235, 0.92);
+        top: 50%;
+        width: 24%;
+        height: 1.5px;
+        background: rgba(255, 242, 226, 0.86);
       }
 
       .cat-whiskers::before {
         left: 0;
-        transform: rotate(8deg);
+        transform: rotate(6deg);
       }
 
       .cat-whiskers::after {
         right: 0;
-        transform: rotate(-8deg);
+        transform: rotate(-6deg);
       }
 
       .overlay {
