@@ -539,14 +539,16 @@
 
       .cat-face {
         position: relative;
-        width: 78%;
+        width: 80%;
         aspect-ratio: 1;
         display: grid;
         place-items: center;
-        border-radius: 50%;
-        background: #2f3135;
+        border-radius: 48% 48% 46% 46%;
+        background:
+          radial-gradient(circle at 50% 66%, #f4ece8 0 25%, transparent 26%),
+          linear-gradient(#2f3135, #24262a);
         box-shadow:
-          inset 0 -7px 0 rgba(0, 0, 0, 0.16),
+          inset 0 -6px 0 rgba(0, 0, 0, 0.18),
           0 7px 14px rgba(77, 48, 45, 0.15);
         isolation: isolate;
       }
@@ -555,65 +557,122 @@
       .cat-face::after {
         content: "";
         position: absolute;
-        top: -10%;
-        width: 34%;
-        height: 34%;
-        background: #2f3135;
-        transform: rotate(45deg);
-        border-radius: 6px;
+        top: -12%;
+        width: 36%;
+        height: 38%;
+        background:
+          linear-gradient(135deg, transparent 0 30%, #f6a7b6 31% 48%, transparent 49%),
+          #2f3135;
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
         z-index: -1;
       }
 
       .cat-face::before {
-        left: 10%;
+        left: 6%;
+        transform: rotate(-16deg);
       }
 
       .cat-face::after {
-        right: 10%;
+        right: 6%;
+        transform: rotate(16deg);
       }
 
       .cat-eyes {
-        width: 62%;
+        width: 60%;
         display: flex;
         justify-content: space-between;
-        transform: translateY(-10%);
+        transform: translateY(-12%);
       }
 
       .cat-eyes i {
-        width: 28%;
+        width: 31%;
         aspect-ratio: 1;
-        border-radius: 50%;
-        background: white;
+        border-radius: 50% 50% 46% 46%;
+        background: #fff7dd;
         position: relative;
       }
 
       .cat-eyes i::after {
         content: "";
         position: absolute;
-        inset: 28%;
-        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        width: 23%;
+        height: 72%;
+        border-radius: 999px;
         background: #171719;
+        transform: translate(-50%, -50%);
       }
 
       .cat-muzzle {
         position: absolute;
-        bottom: 15%;
-        width: 62%;
-        height: 30%;
-        border-radius: 50% 50% 44% 44%;
-        background: #f6f0ee;
+        left: 50%;
+        bottom: 12%;
+        width: 58%;
+        height: 35%;
+        border-radius: 48% 48% 44% 44%;
+        background:
+          radial-gradient(circle at 40% 68%, transparent 0 18%, #3c2b2d 19% 22%, transparent 23%),
+          radial-gradient(circle at 60% 68%, transparent 0 18%, #3c2b2d 19% 22%, transparent 23%),
+          #f6f0ee;
+        transform: translateX(-50%);
+      }
+
+      .cat-muzzle::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 18%;
+        width: 18%;
+        height: 13%;
+        border-radius: 50% 50% 60% 60%;
+        background: #df777d;
+        transform: translateX(-50%);
       }
 
       .cat-muzzle::after {
         content: "";
         position: absolute;
         left: 50%;
-        top: 24%;
-        width: 16%;
-        aspect-ratio: 1;
-        border-radius: 50%;
-        background: #df777d;
+        top: 33%;
+        width: 1px;
+        height: 20%;
+        background: #3c2b2d;
+        box-shadow:
+          -0.9em 0.18em 0 -0.08em #3c2b2d,
+          0.9em 0.18em 0 -0.08em #3c2b2d;
         transform: translateX(-50%);
+      }
+
+      .cat-whiskers {
+        position: absolute;
+        left: 50%;
+        bottom: 23%;
+        width: 88%;
+        height: 24%;
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .cat-whiskers::before,
+      .cat-whiskers::after {
+        content: "";
+        position: absolute;
+        top: 46%;
+        width: 32%;
+        height: 2px;
+        background: rgba(255, 247, 235, 0.92);
+        box-shadow: 0 -0.42em 0 rgba(255, 247, 235, 0.82), 0 0.42em 0 rgba(255, 247, 235, 0.82);
+      }
+
+      .cat-whiskers::before {
+        left: 0;
+        transform: rotate(8deg);
+      }
+
+      .cat-whiskers::after {
+        right: 0;
+        transform: rotate(-8deg);
       }
 
       .overlay {
@@ -762,29 +821,45 @@
       }
 
       @media (max-width: 880px) {
+        html,
+        body {
+          height: 100%;
+          overflow: hidden;
+        }
+
         body {
           padding: 0;
           place-items: stretch;
         }
 
         .game {
-          min-height: 100dvh;
+          height: 100svh;
+          min-height: 100svh;
           border-radius: 0;
           grid-template-columns: 1fr;
-          grid-template-rows: auto 1fr;
+          grid-template-rows: 1fr;
           overflow: auto;
+          padding-bottom: calc(64px + env(safe-area-inset-bottom));
         }
 
         .mobile-tabs {
-          position: sticky;
-          top: 0;
-          z-index: 20;
+          position: fixed;
+          left: 12px;
+          right: 12px;
+          bottom: max(12px, env(safe-area-inset-bottom));
+          z-index: 80;
           display: flex;
           gap: 8px;
-          padding: 10px;
-          background: rgba(255, 250, 247, 0.94);
-          border-bottom: 1px solid var(--line);
+          padding: 8px;
+          border-radius: 999px;
+          background: rgba(255, 250, 247, 0.96);
+          border: 1px solid rgba(255, 255, 255, 0.88);
+          box-shadow: 0 10px 28px rgba(77, 48, 45, 0.18);
           backdrop-filter: blur(12px);
+        }
+
+        .mobile-tab {
+          min-height: 44px;
         }
 
         .sidebar {
@@ -792,6 +867,7 @@
           border-bottom: 1px solid var(--line);
           padding: 16px;
           gap: 12px;
+          min-height: 100%;
         }
 
         body.mobile-board .sidebar {
@@ -816,18 +892,28 @@
         }
 
         .stage {
-          padding: 16px;
-          min-height: calc(100dvh - 61px);
-          grid-template-rows: auto auto auto 1fr auto;
+          padding: max(12px, env(safe-area-inset-top)) 12px 12px;
+          min-height: 100%;
+          grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+          align-content: stretch;
+          gap: 10px;
         }
 
         .board-wrap {
-          width: min(96vw, calc(100dvh - 250px));
+          width: min(96vw, calc(100svh - 238px));
           min-width: 0;
         }
       }
 
       @media (max-width: 560px) {
+        .game {
+          padding-bottom: calc(70px + env(safe-area-inset-bottom));
+        }
+
+        .sidebar {
+          padding: 18px 18px 8px;
+        }
+
         .brand {
           align-items: flex-start;
         }
@@ -845,6 +931,23 @@
           gap: 8px;
         }
 
+        .score-row,
+        .tool-row {
+          gap: 7px;
+        }
+
+        .pill {
+          min-height: 32px;
+          padding: 6px 10px;
+          font-size: 13px;
+        }
+
+        .logic-item {
+          min-height: 34px;
+          padding: 6px 8px;
+          font-size: 11px;
+        }
+
         .round-button {
           width: 40px;
           height: 40px;
@@ -856,8 +959,19 @@
           border-radius: 14px;
         }
 
+        .board-wrap {
+          width: min(96vw, calc(100svh - 220px));
+        }
+
         .cell {
           border-radius: 7px;
+        }
+
+        .tool-button {
+          min-width: auto;
+          min-height: 38px;
+          padding: 8px 10px;
+          font-size: 13px;
         }
       }
     </style>
@@ -972,7 +1086,7 @@
         level: null,
         runBest: Number(localStorage.getItem("meo-run-best") || 1),
         records: JSON.parse(localStorage.getItem("meo-records") || "[]"),
-        mobileView: localStorage.getItem("meo-mobile-view") || "info",
+        mobileView: window.matchMedia("(max-width: 880px)").matches ? "board" : localStorage.getItem("meo-mobile-view") || "board",
       };
 
       let toastTimer = 0;
@@ -1382,7 +1496,7 @@
       function createCatFace() {
         const face = document.createElement("span");
         face.className = "cat-face";
-        face.innerHTML = '<span class="cat-eyes"><i></i><i></i></span><span class="cat-muzzle"></span>';
+        face.innerHTML = '<span class="cat-eyes"><i></i><i></i></span><span class="cat-muzzle"></span><span class="cat-whiskers"></span>';
         return face;
       }
 

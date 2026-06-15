@@ -25,15 +25,20 @@ st.markdown(
       html, body, [data-testid="stAppViewContainer"], .main {
         height: 100%;
         overflow: hidden;
+        background: transparent;
+      }
+      [data-testid="stVerticalBlock"], [data-testid="stElementContainer"] {
+        height: 100svh;
       }
       iframe {
         display: block;
-        height: 100dvh !important;
-        min-height: 100dvh !important;
+        width: 100% !important;
+        height: 100svh !important;
+        min-height: 100svh !important;
       }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-components.html(html, height=1400, scrolling=True)
+components.html(html, height=1200, scrolling=True)
